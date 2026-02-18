@@ -11,15 +11,20 @@ This workflow builds the container image, pushes it to Azure Container Registry,
 
 ### Create the federated credential
 
-```bash
-# Create an app registration
-az ad app create --display-name "github-deploy"
+`APP_ID` (also called the **Application (client) ID**) is a GUID that uniquely identifies the app registration in Microsoft Entra ID. You get it from the output of the first command below:
 
-# Create a service principal
-az ad sp create --id <APP_ID>
+```bash
+# Create an app registration and capture the APP_ID from the output
+az ad app create --display-name "mgr-github-deploy" --query appId -o tsv
+# ⬆ This prints the APP_ID (e.g. a1b2c3d4-e5f6-7890-abcd-ef1234567890)
+# Save it:  APP_ID=<value printed above>
+
+# Create a service principal for the app registration
+# (The app must exist in your local tenant — which it does from the step above)
+az ad sp create --id $APP_ID
 
 # Add a federated credential for the main branch
-az ad app federated-credential create --id <APP_ID> --parameters '{
+az ad app federated-credential create --id $APP_ID --parameters '{
   "name": "github-main",
   "issuer": "https://token.actions.githubusercontent.com",
   "subject": "repo:<OWNER>/<REPO>:ref:refs/heads/main",
@@ -27,9 +32,11 @@ az ad app federated-credential create --id <APP_ID> --parameters '{
 }'
 
 # Assign roles
-az role assignment create --assignee <APP_ID> --role AcrPush --scope <ACR_RESOURCE_ID>
-az role assignment create --assignee <APP_ID> --role Contributor --scope <RESOURCE_GROUP_ID>
+az role assignment create --assignee $APP_ID --role AcrPush --scope <ACR_RESOURCE_ID>
+az role assignment create --assignee $APP_ID --role Contributor --scope <RESOURCE_GROUP_ID>
 ```
+
+> **Note:** The `APP_ID` value is the same value you set as the `AZURE_CLIENT_ID` GitHub secret.
 
 ## GitHub Secrets
 

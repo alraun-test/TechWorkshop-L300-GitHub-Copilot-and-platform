@@ -144,3 +144,5 @@ desktop.ini
 !/.gitattributes
 !/.gitignore
 .DS_Store
+
+credentials.json
