@@ -12,9 +12,9 @@ permissions:
   contents: read
 
 env:
-  AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
-  AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
-  AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+  AZURE_ENV_NAME: prod
+  AZURE_LOCATION: westus3
+  AZURE_SUBSCRIPTION_ID: b17b5c90-9140-49df-895f-d8f1139ccaf9
 
 jobs:
   build-and-push:
@@ -28,9 +28,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          client-id: f3ca2417-5610-476c-83e6-2d0bff678d54
+          tenant-id: 50b09810-88c1-4d76-af71-e73044fc317e
+          subscription-id: b17b5c90-9140-49df-895f-d8f1139ccaf9
 
       - name: Build and push image to ACR (cloud build)
         run: |
@@ -49,9 +49,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          client-id: f3ca2417-5610-476c-83e6-2d0bff678d54
+          tenant-id: 50b09810-88c1-4d76-af71-e73044fc317e
+          subscription-id: b17b5c90-9140-49df-895f-d8f1139ccaf9
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
