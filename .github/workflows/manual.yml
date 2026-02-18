@@ -1,0 +1,27 @@
+name: Run Azure Login with OIDC
+on: [push]
+
+permissions:
+  id-token: write
+  contents: read  
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        run: echo "$AZURE_CLIENT_ID"
+
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: 23113edc-2879-49fa-9b4b-ec29fb55e688
+          tenant-id: 50b09810-88c1-4d76-af71-e73044fc317e
+          subscription-id: b17b5c90-9140-49df-895f-d8f1139ccaf9
+
+      - name: 'Run az commands'
+        run: |
+          az account show
+          az group list
