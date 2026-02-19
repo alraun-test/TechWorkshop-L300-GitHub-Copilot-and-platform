@@ -86,6 +86,8 @@ module appService 'modules/appservice.bicep' = {
     dockerImageName: dockerImageName
     dockerImageTag: dockerImageTag
     skuName: 'B1'
+    aiServicesEndpoint: aiServices.outputs.aiServicesEndpoint
+    aiModelName: 'Phi-4'
     tags: union(tags, {
       'azd-service-name': 'web'
     })
@@ -103,6 +105,16 @@ module aiServices 'modules/ai.bicep' = {
     location: location
     skuName: 'S0'
     tags: tags
+  }
+}
+
+// ── Cognitive Services OpenAI User Role (App Service → AI Services) ─────────
+module aiOpenAIRole 'modules/airoleassignment.bicep' = {
+  name: 'ai-openai-role-deployment'
+  params: {
+    aiServicesId: aiServices.outputs.aiServicesId
+    principalId: appService.outputs.webAppPrincipalId
+    principalType: 'ServicePrincipal'
   }
 }
 

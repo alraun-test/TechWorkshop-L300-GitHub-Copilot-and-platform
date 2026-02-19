@@ -31,6 +31,12 @@ param skuName string = 'B1'
 @description('Log Analytics workspace resource ID for diagnostics')
 param logAnalyticsWorkspaceId string
 
+@description('Azure AI Services endpoint')
+param aiServicesEndpoint string
+
+@description('AI model deployment name')
+param aiModelName string = 'Phi-4'
+
 @description('Tags for the resources')
 param tags object = {}
 
@@ -76,6 +82,18 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'DOCKER_REGISTRY_SERVER_URL'
           value: 'https://${acrLoginServer}'
+        }
+        {
+          name: 'AzureAI__Endpoint'
+          value: aiServicesEndpoint
+        }
+        {
+          name: 'AzureAI__ModelName'
+          value: aiModelName
+        }
+        {
+          name: 'AzureAI__ApiKey'
+          value: ''
         }
       ]
       cors: {
