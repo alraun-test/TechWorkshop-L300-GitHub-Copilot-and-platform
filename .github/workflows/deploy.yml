@@ -51,5 +51,5 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ vars.WEB_APP_NAME }}
+          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
           images: ${{ vars.ACR_LOGIN_SERVER }}/zavastorefront:${{ github.sha }}
